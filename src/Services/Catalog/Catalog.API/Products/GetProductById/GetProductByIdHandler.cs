@@ -10,15 +10,12 @@ namespace Catalog.API.Products.GetProductById
 {
     public record GetProductByIdQuery(Guid Id):IQuery<GetProductByIdResult>;
     public record GetProductByIdResult(ProductDto Product);
-    public record ProductDto(Guid Id,string Name,string Description,string Image,double Price);
+    public abstract record ProductDto(Guid Id,string Name,string Description,string Image,double Price);
     public class  GetProductByIdEndPoint : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/products/{id}", async (Guid Id, ISender sender) =>
-            {
-                return await sender.Send(new GetProductByIdQuery(Id));
-            }).WithName("GetProductById")
+            app.MapGet("/products/{id:guid}", async (Guid id, ISender sender) => await sender.Send(new GetProductByIdQuery(id))).WithName("GetProductById")
             .Produces<GetProductByIdResult>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Get Product By Id")
