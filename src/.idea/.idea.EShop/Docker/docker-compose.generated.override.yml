@@ -5,16 +5,33 @@ services:
       context: "D:\\2024\\microservices\\EShop\\src"
       dockerfile: "Services/Catalog/Catalog.API/Dockerfile"
       target: "base"
+      args:
+        BUILD_CONFIGURATION: "Debug"
     command: []
     entrypoint:
-    - "dotnet"
-    - "/app/bin/Debug/net8.0/Catalog.API.dll"
+    - "/opt/rider-debugger/linux-x64/JetBrains.Debugger.Worker"
+    - "--runtimeconfig"
+    - "/opt/rider-debugger/JetBrains.Debugger.Worker.runtimeconfig.json"
+    - "--mode=server"
+    - "--frontend-port=57100"
+    - "--backend-port=57300"
+    - "--timeout=60"
     environment:
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
+      RIDER_DEBUGGER_LOG_DIR: "/var/opt/rider-debugger"
+      RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
     image: "catalogapi:dev"
-    ports: []
+    ports:
+    - "127.0.0.1:57000:57100"
+    - "127.0.0.1:57200:57300"
     volumes:
     - "C:\\Users\\mostafa.kamel\\.nuget\\packages:/home/app/.nuget/packages"
     - "D:\\2024\\microservices\\EShop\\src\\Services\\Catalog\\Catalog.API:/app:rw"
     - "D:\\2024\\microservices\\EShop\\src:/src:rw"
+    - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\RiderRemoteDebugger\\\
+      2024.2.7\\Linux64:/opt/rider-debugger"
+    - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\JetBrains Rider 2024.2.7\\\
+      bin:/etc/opt/rider-debugger/backend-log.xml"
+    - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\Rider2024.2\\log\\DebuggerWorker\\\
+      JetBrains.Debugger.Worker.2024_11_10_14_45_20:/var/opt/rider-debugger:rw"
     working_dir: "/app"
