@@ -9,29 +9,31 @@ services:
         BUILD_CONFIGURATION: "Debug"
     command: []
     entrypoint:
-    - "/opt/rider-debugger/linux-x64/JetBrains.Debugger.Worker"
+    - "/opt/JetBrains/RiderDebuggerTools/linux-x64/JetBrains.Debugger.Worker"
     - "--runtimeconfig"
-    - "/opt/rider-debugger/JetBrains.Debugger.Worker.runtimeconfig.json"
+    - "/opt/JetBrains/RiderDebuggerTools/JetBrains.Debugger.Worker.runtimeconfig.json"
     - "--mode=server"
-    - "--frontend-port=57100"
-    - "--backend-port=57300"
+    - "--frontend-port=57000"
+    - "--backend-port=57200"
+    - "--roslyn-worker-port=57400"
     - "--timeout=60"
     environment:
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
-      RIDER_DEBUGGER_LOG_DIR: "/var/opt/rider-debugger"
-      RESHARPER_LOG_CONF: "/etc/opt/rider-debugger/backend-log.xml"
+      RIDER_DEBUGGER_LOG_DIR: "/var/opt/JetBrains/RiderDebuggerTools"
+      RESHARPER_LOG_CONF: "/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
     image: "catalogapi:dev"
     ports:
-    - "127.0.0.1:57000:57100"
-    - "127.0.0.1:57200:57300"
+    - "127.0.0.1:57001:57000"
+    - "127.0.0.1:57201:57200"
+    - "127.0.0.1:57401:57400"
     volumes:
-    - "C:\\Users\\mostafa.kamel\\.nuget\\packages:/home/app/.nuget/packages"
     - "D:\\2024\\microservices\\EShop\\src\\Services\\Catalog\\Catalog.API:/app:rw"
     - "D:\\2024\\microservices\\EShop\\src:/src:rw"
+    - "C:\\Users\\mostafa.kamel\\.nuget\\packages:/home/app/.nuget/packages"
     - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\RiderRemoteDebugger\\\
-      2024.2.7\\Linux64:/opt/rider-debugger"
+      2024.3\\Linux64:/opt/JetBrains/RiderDebuggerTools"
     - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\JetBrains Rider 2024.2.7\\\
-      bin:/etc/opt/rider-debugger/backend-log.xml"
-    - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\Rider2024.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2024_11_10_14_45_20:/var/opt/rider-debugger:rw"
+      bin\\backend-log.xml:/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
+    - "C:\\Users\\mostafa.kamel\\AppData\\Local\\JetBrains\\Rider2024.3\\log\\DebuggerWorker\\\
+      JetBrains.Debugger.Worker.2024_11_18_09_25_01:/var/opt/JetBrains/RiderDebuggerTools:rw"
     working_dir: "/app"

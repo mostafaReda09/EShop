@@ -15,17 +15,15 @@ namespace EShop.Shared.Behaviors
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            if (validators.Any()) {
-                var context = new ValidationContext<TRequest>(request);
-                var validationResults = await Task
-                    .WhenAll(validators.Select(x=>x.ValidateAsync(context,cancellationToken)));
+            if (!validators.Any()) return await next();
+            var context = new ValidationContext<TRequest>(request);
+            var validationResults = await Task
+                .WhenAll(validators.Select(x=>x.ValidateAsync(context,cancellationToken)));
 
-                var errors=validationResults
-                    .Where(x => x.Errors.Count != 0)
-                    .SelectMany(r=>r.Errors).ToList();  
-                throw new ValidationException(errors);
-            }
-            return await next();
+            var errors=validationResults
+                .Where(x => x.Errors.Count != 0)
+                .SelectMany(r=>r.Errors).ToList();  
+            throw new ValidationException(errors);
         }
     }
 }
