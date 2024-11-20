@@ -1,4 +1,5 @@
-﻿using Basket.API.Entities;
+﻿using Basket.API.Data;
+using Basket.API.Entities;
 using Carter;
 using EShop.Shared.CQRS;
 using MediatR;
@@ -25,11 +26,12 @@ namespace Basket.API.Basket.DeleteBasket
         }
     }
 
-    public class DeleteBasketCommandHandler : ICommandHandler<DeleteBasketCommand, DeleteBasketCommandResponse>
+    public class DeleteBasketCommandHandler(IBasketRepository repository) : ICommandHandler<DeleteBasketCommand, DeleteBasketCommandResponse>
     {
-        public Task<DeleteBasketCommandResponse> Handle(DeleteBasketCommand request, CancellationToken cancellationToken)
+        public async Task<DeleteBasketCommandResponse> Handle(DeleteBasketCommand command, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await repository.DeleteBasketAsync(command.UserName,cancellationToken);
+            return new DeleteBasketCommandResponse();
         }
     }
 }

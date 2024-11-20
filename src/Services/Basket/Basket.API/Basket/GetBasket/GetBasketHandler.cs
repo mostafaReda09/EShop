@@ -1,4 +1,5 @@
-﻿using Basket.API.Entities;
+﻿using Basket.API.Data;
+using Basket.API.Entities;
 using Carter;
 using EShop.Shared.CQRS;
 using MediatR;
@@ -11,9 +12,9 @@ namespace Basket.API.Basket.GetBasket
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/basket", async (string userNAme, ISender sender) =>
+            app.MapGet("/basket/{userName}", async (string userName, ISender sender) =>
             {
-                var result = await sender.Send(new GetBasketQuery(userNAme));
+                var result = await sender.Send(new GetBasketQuery(userName));
                 return Results.Ok(result);
             })
               .WithName("Get Basket")
@@ -25,11 +26,12 @@ namespace Basket.API.Basket.GetBasket
                
         }
     }
-    public class GetBasketQueryHandler : IQueryHandler<GetBasketQuery, GetBasketResponse>
+    public class GetBasketQueryHandler(IBasketRepository repository) : IQueryHandler<GetBasketQuery, GetBasketResponse>
     {
-        public Task<GetBasketResponse> Handle(GetBasketQuery request, CancellationToken cancellationToken)
+        public async Task<GetBasketResponse> Handle(GetBasketQuery query, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var basket= await repository.GetBasketAsync(query.UserName,cancellationToken);
+            return new GetBasketResponse(basket);
         }
     }
 }

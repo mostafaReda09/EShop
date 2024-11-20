@@ -1,4 +1,5 @@
-﻿using Basket.API.Entities;
+﻿using Basket.API.Data;
+using Basket.API.Entities;
 using Carter;
 using EShop.Shared.CQRS;
 using FluentValidation;
@@ -34,12 +35,13 @@ namespace Basket.API.Basket.StoreBasket
           RuleFor(x=>x.Cart.UserName).NotEmpty().WithMessage("User name is required");
         }
     }
-    public class StoreBasketCommandHandler : ICommandHandler<StoreBasketCommand, StoreBasketCommandResponse>
+    public class StoreBasketCommandHandler(IBasketRepository repository) : ICommandHandler<StoreBasketCommand, StoreBasketCommandResponse>
     {
         public async Task<StoreBasketCommandResponse> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
         {
 
-           throw new NotImplementedException();
+            var result = await repository.StoreBasketAsync(command.Cart, cancellationToken);
+            return new StoreBasketCommandResponse(result.UserName);
         }
     }
 }
