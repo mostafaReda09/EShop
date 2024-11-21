@@ -5,6 +5,7 @@ using EShop.Shared.Behaviors;
 using EShop.Shared.Exceptions.Handlers;
 using FluentValidation;
 using Marten;
+using Microsoft.Extensions.Caching.Distributed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,16 @@ builder.Services
         opt.Schema.For<ShoppingCart>().Identity(x => x.UserName);
     }).UseLightweightSessions();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+//builder.Services.AddScoped<IBasketRepository>(provider =>
+//{
+//    var basketRepository=provider.GetRequiredService<BasketRepository>();
+//    return new CachedBasketRepository(basketRepository,provider.GetRequiredService<IDistributedCache>());
+//});
 var app = builder.Build();
 app.MapCarter();
 app.UseExceptionHandler(options => { });
