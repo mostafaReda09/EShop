@@ -20,6 +20,12 @@ services:
   distributedcache:
     image: redis
 
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    build:
+      context: Services/Discount/Discount.Grpc
+      dockerfile: Dockerfile
+
 volumes:
   postgres_catalog:
   postgres_basket:
