@@ -38,10 +38,21 @@ builder.Services.AddStackExchangeRedisCache(options =>
 //    return new CachedBasketRepository(basketRepository,provider.GetRequiredService<IDistributedCache>());
 //});
 builder.Services
-    .AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options => 
+    .AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
     {
         options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+    })
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+        return handler;
     });
+    
+
 var app = builder.Build();
 app.MapCarter();
 app.UseExceptionHandler(options => { });
