@@ -1,6 +1,7 @@
 using Basket.API.Data;
 using Basket.API.Entities;
 using Carter;
+using Discount.Grpc;
 using EShop.Shared.Behaviors;
 using EShop.Shared.Exceptions.Handlers;
 using FluentValidation;
@@ -36,6 +37,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
 //    var basketRepository=provider.GetRequiredService<BasketRepository>();
 //    return new CachedBasketRepository(basketRepository,provider.GetRequiredService<IDistributedCache>());
 //});
+builder.Services
+    .AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options => 
+    {
+        options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+    });
 var app = builder.Build();
 app.MapCarter();
 app.UseExceptionHandler(options => { });
