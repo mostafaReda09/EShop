@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace Ordering.Domain.Abstractions
 {
-    public class DomainEvent : INotification
+    public interface IDomainEvent : INotification
     {
+        Guid EventId=>Guid.NewGuid();
+        public DateTime OccuredOn=>DateTime.UtcNow;
+        public string EventType=>GetType().Name;
     }
 }

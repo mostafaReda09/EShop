@@ -12,5 +12,18 @@ namespace Ordering.Domain.Entities
     {
         public string Name { get; private set; } = default!;
         public string Email { get; private set; } = default!;
+
+        public static Customer Create(CustomerId customerId,string name,string email) 
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(name);
+            ArgumentException.ThrowIfNullOrWhiteSpace(email);
+
+            return new Customer
+            {
+                Id = customerId,
+                Name = name,
+                Email = email
+            };
+        }
     }
 }
