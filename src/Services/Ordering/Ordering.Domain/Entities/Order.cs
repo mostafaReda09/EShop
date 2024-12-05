@@ -15,7 +15,10 @@ namespace Ordering.Domain.Entities
         public Payement Payement { get; private set; } = default!;
         public OrderStatus OrderStatus { get; private set; } = OrderStatus.Pending;
         public decimal TotalPrice => _items.Sum(x => x.Price * x.Quantity);
-
+        private Order()
+        {
+            
+        }
         public static Order Create(OrderId Id,CustomerId customerId,Address shippingAddress,Address billingAddress,Payement payement)
         {
 

@@ -10,6 +10,10 @@ namespace Ordering.Domain.Entities
 {
     public class Product : Entity<ProductId>
     {
+        private Product()
+        {
+            
+        }
         public string Name { get; private set; } = default!;
         public decimal Price { get; private set; }
 

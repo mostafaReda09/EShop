@@ -71,3 +71,13 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  orderdb:
+    container_name: orderedb
+    environment:
+     - ACCEPT_EULA=y
+     - SA_PASSWORD=SA_pASSWORD
+    restart: always
+    ports:
+      - "1433:1433"
+  

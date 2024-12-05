@@ -15,7 +15,10 @@ namespace Ordering.Domain.ValueObjects
         public string Country { get; set; } = default!;
         public string State { get; set; } = default!;
         public string ZipCode { get; set; } = default!;
-
+        private Address()
+        {
+            
+        }
         private Address(string firstName,string lastName,string emailAdress,string addressLine,string country,string state,string zipcode)
         {
             FirstName = firstName;

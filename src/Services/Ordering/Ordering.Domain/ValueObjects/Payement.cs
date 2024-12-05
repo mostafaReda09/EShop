@@ -9,6 +9,10 @@ namespace Ordering.Domain.ValueObjects
 {
     public record Payement
     {
+        private Payement()
+        {
+            
+        }
         public string? CardName { get;}
         public string CardNumber { get;} = default!;
         public string Expiration { get;} = default!;
